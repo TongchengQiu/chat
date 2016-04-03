@@ -5,6 +5,15 @@
 </template>
 
 <script>
+// var io = require('socket.io-client');
+// window.io = io;
+// var secket = io.connect('http://localhost:8888');
+// secket.emit('login', 'qiutc');
+// secket.emit('send', 'qiutc', 'qiutc', 'hello');
+// secket.on('receive', function (msg) {
+//   console.log(msg);
+// });
+
 export default {
 
 }

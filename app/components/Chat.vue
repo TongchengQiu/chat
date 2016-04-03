@@ -23,6 +23,8 @@ import store from '../store.js';
 let datas = store.datas;
 let methods = store.methods;
 
+import socket from '../socket';
+
 import LeftSider from './LeftSider';
 import ChatBox from './ChatBox';
 
@@ -35,6 +37,19 @@ export default {
   components: {
     LeftSider,
     ChatBox
+  },
+  events: {
+    'send-msg': function (msg) {
+      console.log(msg);
+      this.sendFoo(datas.userList[datas.activeUser].name, msg);
+    }
+  },
+  ready: function() {
+
+    this.sendFoo = socket(datas.userData.name, function (msg) {
+      methods.receiveMsg(msg);
+    });
+
   }
 };
 </script>
