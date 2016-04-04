@@ -1,20 +1,24 @@
 <template>
   <div>
-    <router-view class="view" transition="test" transition-mode="out-in" keep-alive></router-view>
+    <!-- 路由渲染的组件位置 -->
+    <router-view
+      class="view"
+      transition="test"
+      transition-mode="out-in"
+      keep-alive
+      :store="store">
+    </router-view>
   </div>
 </template>
 
 <script>
-// var io = require('socket.io-client');
-// window.io = io;
-// var secket = io.connect('http://localhost:8888');
-// secket.emit('login', 'qiutc');
-// secket.emit('send', 'qiutc', 'qiutc', 'hello');
-// secket.on('receive', function (msg) {
-//   console.log(msg);
-// });
+import store from './store.js';
 
 export default {
-
+  data: function() {
+    return {
+      store: store
+    };
+  }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="chat-cont">
     <ul>
-      <li v-for="chat in chatCont.chat" :class="chat.type">
+      <li v-if="chatCont" v-for="chat in chatCont.chat" :class="chat.type">
         <p class="time"><span>{{ chat.time }}</span></p>
         <div class="cont">
           <img :src="chat.type == 'other' ? chatCont.img : userData.img" alt="qiutc" />

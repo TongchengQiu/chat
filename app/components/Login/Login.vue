@@ -57,9 +57,6 @@ import Vue from 'vue';
 import VueValidator from 'vue-validator';
 Vue.use(VueValidator);
 
-import store from '../store.js';
-let methods = store.methods;
-
 export default {
   data () {
     return {
@@ -69,6 +66,7 @@ export default {
       isLogin: false
     };
   },
+  props: ['store'],
   methods: {
     handleLogin: function(e) {
       e.preventDefault();
@@ -79,7 +77,7 @@ export default {
       if(this.username.trim() && this.password.trim()) {
         this.isLogin = true;
         let that = this;
-        methods.login(this.username.trim(), this.password.trim(), {
+        this.store.methods.login(this.username.trim(), this.password.trim(), {
           seccess: function () {
             that.isLogin = false;
             that.$route.router.replace({name: 'chat'});

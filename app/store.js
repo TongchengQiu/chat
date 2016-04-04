@@ -1,4 +1,8 @@
+import socket from './socket';
+require('whatwg-fetch');
+
 var datas = {
+  username: '',
   userData: {},
   userList: [],
   activeUser: -1,
@@ -6,9 +10,10 @@ var datas = {
 };
 
 var methods = {
+
+  // 接受 用户名，密码，以及 conf{ success, error}两个函数
   login: function (username, password, conf) {
-    datas.userData.name = username;
-    fetch('/login', {
+    window.fetch('/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -22,6 +27,9 @@ var methods = {
     .then(parseJSON)
     .then(function (result) {
       if (result.status === 1) {
+        datas.username = username;
+        lstorage.clear();
+        lstorage.setItem('username', datas.username);
         conf.seccess();
       } else if (result.status === 0) {
         conf.error(result.msg);
@@ -29,49 +37,89 @@ var methods = {
     });
     return true;
   },
+
+  // 获取当前用户数据，接受 username
   getUserData: function () {
-    datas.userData = {
-      img: 'http://coffcer.github.io/vue-chat/dist/images/1.jpg',
-      name: datas.userData.name,
-      id: '12323'
-    };
-    return datas.userData;
-  },
-  getUserList: function () {
-    datas.userList = [
-      {
-        img: 'http://coffcer.github.io/vue-chat/dist/images/2.png',
-        name: 'vue',
-        id: 1,
-        chat: [
-          {
-            time: '24:00',
-            type: 'other',
-            text: 'hello ?'
-          }
-        ]
+    var _username = lstorage.getItem('username');
+    window.fetch('/getUserData', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
-      {
-        img: 'http://coffcer.github.io/vue-chat/dist/images/3.jpg',
-        name: 'qiutc',
-        id: 2,
-        chat: []
-      },
-      {
-        img: 'http://coffcer.github.io/vue-chat/dist/images/3.jpg',
-        name: 'webpack2',
-        id: 3,
-        chat: []
-      },
-      {
-        img: 'http://coffcer.github.io/vue-chat/dist/images/1.jpg',
-        name: '123',
-        id: 4,
-        chat: []
+      body: JSON.stringify({
+        username: _username
+      })
+    })
+    .then(parseJSON)
+    .then((result) => {
+      if (result.status === 1) {
+        datas.userData = {
+          img: result.img,
+          name: result.name
+        };
+      } else if (result.status === 0) {
+        console.log(result.error);
       }
-    ];
-    datas.activeUser = 0;
+    });
+    return true;
   },
+
+  // 获取用户列表
+  getUserList: function () {
+    var _userList = lstorage.getItem('userList');
+    if (_userList) {
+      datas.userList = _userList;
+      datas.activeUser = 0;
+      return true;
+    }
+
+    var _username = lstorage.getItem('username');
+    window.fetch('/getUserList', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: _username
+      })
+    })
+    .then(parseJSON)
+    .then((result) => {
+      if (result.status === 1) {
+        datas.userList = result.data;
+        datas.activeUser = 0;
+        lstorage.setItem('userList', datas.userList);
+      } else if (result.status === 0) {
+        console.log(result.error);
+      }
+    });
+  },
+
+  // 打开 socket
+  openSocket: function () {
+    var _username = lstorage.getItem('username');
+    var that = this;
+    this.sendFoo = socket(_username, function (msg) {
+      that.receiveMsg(msg);
+    });
+  },
+
+  // 发送消息
+  sendMessage: function (msg) {
+    let date = new Date();
+    let time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    datas.userList[datas.activeUser].chat.push({
+      time: time,
+      text: msg,
+      type: 'self'
+    });
+    lstorage.setItem('userList', datas.userList);
+    this.sendFoo(datas.userList[datas.activeUser].name, msg);
+  },
+
+  // 收到消息
   receiveMsg: function (obj) {
     datas.userList.forEach((item, idx) => {
       if (item.name === obj.from) {
@@ -82,6 +130,7 @@ var methods = {
         });
       }
     });
+    lstorage.setItem('userList', datas.userList);
   }
 };
 
@@ -92,4 +141,25 @@ export default {
 
 function parseJSON (response) {
   return response.json();
+};
+
+var lstorage = {
+  setItem: function (key, val) {
+    var _val = JSON.stringify(val);
+    window.localStorage.setItem(key, _val);
+    return true;
+  },
+  getItem: function (key) {
+    var _val = window.localStorage.getItem(key);
+    if (_val === undefined) {
+      return '';
+    }
+    return JSON.parse(_val);
+  },
+  deleteItem: function (key) {
+    return window.localStorage.removeItem(key);
+  },
+  clear: function () {
+    return window.localStorage.clear();
+  }
 };

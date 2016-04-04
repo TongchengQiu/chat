@@ -12,7 +12,7 @@
 
     <img :src="user.img" alt="{{ user.name }}" />
     <span class="name">{{ user.name }}</span>
-    
+
   </li>
 
 </ul>
@@ -25,6 +25,8 @@ export default {
   methods: {
     chooseUser: function(index) {
       this.activeUser = index;
+      document.querySelector('.chat-text textarea').focus();
+      document.querySelector('.chat-text textarea').value = '';
     }
   }
 }

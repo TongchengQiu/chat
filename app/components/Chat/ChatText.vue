@@ -19,15 +19,12 @@ export default {
       if (!this.text.trim()) {
         return false;
       }
-      let date = new Date();
-      let time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-      this.chatCont.chat.push({
-        time: time,
-        text: this.text.trim(),
-        type: 'self'
-      });
       var _text = this.text.trim()
       this.text = '';
+      var $chatCont = document.querySelector('.chat-cont');
+      setTimeout(() => {
+        $chatCont.scrollTop = $chatCont.scrollHeight - $chatCont.offsetHeight;
+      }, 100);
       this.$dispatch('send-msg', _text);
     }
   }

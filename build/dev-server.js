@@ -20,13 +20,86 @@ app.use(session({
 }));
 
 app.post('/login', function (req, res) {
-  if ((req.body.username == '123' && req.body.password == '123') || (req.body.username == 'qiutc' && req.body.password == 'qiutc')) {
+  if ((req.body.username === 'vue' && req.body.password === 'vue') || (req.body.username === 'qiutc' && req.body.password === 'qiutc')) {
     req.session.username = req.body.username;
     res.json({status: 1, msg: ''});
   } else {
     res.json({status: 0, msg: '用户名或者密码错误'});
   }
 });
+app.post('/getUserData', function (req, res) {
+  if (req.body.username === 'vue') {
+    res.json({
+      status: 1,
+      img: 'http://coffcer.github.io/vue-chat/dist/images/2.png',
+      name: req.body.username
+    });
+  } else if (req.body.username === 'qiutc') {
+    res.json({
+      status: 1,
+      img: 'http://coffcer.github.io/vue-chat/dist/images/1.jpg',
+      name: req.body.username
+    });
+  } else {
+    res.json({
+      status: 0,
+      msg: '错误'
+    });
+  }
+});
+app.post('/getUserList', function (req, res) {
+  if (req.body.username === 'vue') {
+    res.json({
+      status: 1,
+      data: [
+        {
+          img: 'http://coffcer.github.io/vue-chat/dist/images/3.jpg',
+          name: 'qiutc',
+          id: 2,
+          chat: []
+        },
+        {
+          img: 'http://coffcer.github.io/vue-chat/dist/images/3.jpg',
+          name: 'webpack2',
+          id: 3,
+          chat: []
+        },
+        {
+          img: 'http://coffcer.github.io/vue-chat/dist/images/1.jpg',
+          name: '123',
+          id: 4,
+          chat: []
+        }
+      ]
+    });
+  }
+  if (req.body.username === 'qiutc') {
+    res.json({
+      status: 1,
+      data: [
+        {
+          img: 'http://coffcer.github.io/vue-chat/dist/images/3.jpg',
+          name: 'webpack2',
+          id: 3,
+          chat: []
+        },
+        {
+          img: 'http://coffcer.github.io/vue-chat/dist/images/1.jpg',
+          name: '123',
+          id: 4,
+          chat: []
+        },
+        {
+          img: 'http://coffcer.github.io/vue-chat/dist/images/2.png',
+          name: 'vue',
+          id: 1,
+          chat: []
+        }
+      ]
+    });
+  }
+});
+
 app.get('/login', function (req, res, next) {
   if (req.session.username) {
     res.redirect('/');

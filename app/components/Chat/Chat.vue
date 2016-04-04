@@ -19,36 +19,28 @@
 </template>
 
 <script>
-import store from '../store.js';
-let datas = store.datas;
-let methods = store.methods;
-
-import socket from '../socket';
-
 import LeftSider from './LeftSider';
 import ChatBox from './ChatBox';
 
 export default {
   data () {
-    methods.getUserData();
-    methods.getUserList();
-    return datas;
+    return this.store.datas;
   },
+  props: ['store'],
   components: {
     LeftSider,
     ChatBox
   },
   events: {
     'send-msg': function (msg) {
-      console.log(msg);
-      this.sendFoo(datas.userList[datas.activeUser].name, msg);
+      this.store.methods.sendMessage(msg);
     }
   },
-  ready: function() {
+  created: function() {
 
-    this.sendFoo = socket(datas.userData.name, function (msg) {
-      methods.receiveMsg(msg);
-    });
+    this.store.methods.getUserData();
+    this.store.methods.getUserList();
+    this.store.methods.openSocket();
 
   }
 };
