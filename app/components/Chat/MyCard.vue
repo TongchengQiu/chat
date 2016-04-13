@@ -2,7 +2,7 @@
   <div class="my-card">
     <div class="inner">
       <img :src="userData.img" :alt="userData.name">
-      <h2>{{ userData.name }}</h2>
+      <h2>{{ userData.username }}</h2>
     </div>
   </div>
 </template>

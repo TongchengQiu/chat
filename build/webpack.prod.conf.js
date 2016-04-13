@@ -15,14 +15,14 @@ module.exports = merge(config, {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/',
     filename: 'static/js/[name].[hash].js',
-    chunkFilename: '[id].[chunkhash].js'
+    chunkFilename: 'static/js/[id].[chunkhash].js'
   },
-  vue: {
-    loaders: cssLoaders({
-      sourceMap: SOURCE_MAP,
-      extract: true
-    })
-  },
+  // vue: {
+  //   loaders: cssLoaders({
+  //     sourceMap: SOURCE_MAP,
+  //     extract: true
+  //   })
+  // },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {

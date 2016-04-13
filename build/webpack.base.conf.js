@@ -1,4 +1,5 @@
 var path = require('path');
+var cssLoaders = require('./css-loaders');
 
 // 定义根目录
 var projectRoot = path.resolve(__dirname, '../');
@@ -17,14 +18,14 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.js', '.vue'],
-    // fallback: [path.join(__dirname, '../node_modules')],
+    fallback: [path.join(__dirname, '../node_modules')],
     alias: {
       'app': path.resolve(__dirname, '../app')
     }
   },
-  // resolveLoader: {
-  //   fallback: [path.join(__dirname, '../node_modules')]
-  // },
+  resolveLoader: {
+    fallback: [path.join(__dirname, '../node_modules')]
+  },
   module: {
     // preLoaders: [
     //   {
@@ -79,7 +80,7 @@ module.exports = {
   }
   // vue: {
   //   loaders: cssLoaders()
-  // },
+  // }
   // eslint: {
   //   formatter: require('eslint-friendly-formatter')
   // }

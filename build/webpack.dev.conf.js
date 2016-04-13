@@ -5,7 +5,6 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var config = require('./webpack.base.conf');
 
-
 // 入口，需要处理
 var devClient = './build/dev-client';
 Object.keys(config.entry).forEach(function (name, i) {

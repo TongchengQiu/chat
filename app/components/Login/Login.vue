@@ -46,7 +46,7 @@
 
     </validator>
 
-    <div class="mask" v-if="isLogin"></div>
+    <div class="mask" v-if="isLogining"></div>
 
   </div>
 
@@ -63,28 +63,28 @@ export default {
       username: '',
       password: '',
       errorTip: '',
-      isLogin: false
+      isLogining: false
     };
   },
   props: ['store'],
   methods: {
     handleLogin: function(e) {
       e.preventDefault();
-      if(this.isLogin) {
+      if(this.isLogining) {
         return false;
       }
       this.cleanErrorTip();
       if(this.username.trim() && this.password.trim()) {
-        this.isLogin = true;
+        this.isLogining = true;
         let that = this;
         this.store.methods.login(this.username.trim(), this.password.trim(), {
           seccess: function () {
-            that.isLogin = false;
+            that.isLogining = false;
             that.$route.router.replace({name: 'chat'});
           },
           error: function(err) {
             that.errorTip = err;
-            that.isLogin = false;
+            that.isLogining = false;
           }
         });
         return true;
@@ -102,6 +102,9 @@ export default {
 </script>
 
 <style media="screen" lang="sass">
+  body {
+    padding-top: 50px;
+  }
   .login-box {
     position: relative;
     width: 600px;
@@ -109,6 +112,7 @@ export default {
     background: #F6F9FB;
     border-radius: 4px;
     margin: 50px auto;
+    margin-top: 0;
     text-align: center;
     overflow: hidden;
     h1 {

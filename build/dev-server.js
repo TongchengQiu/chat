@@ -1,17 +1,28 @@
 var express = require('express');
 var webpack = require('webpack');
 var config = require('./webpack.dev.conf');
-var chatSocket = require('../chat-socket');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var cookieParser = require('cookie-parser');
+
+var chatSocket = require('../server/chat-socket');
+var router = require('../server/router.js');
+
+// 端口号
+var port = process.env.PORT || 8888;
 
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(cookieParser('keyboard cat'));
+
+var sessionStore = new session.MemoryStore();
 // use session
 app.use(session({
+  name: 'sid',
   secret: 'keyboard cat',
+  store: sessionStore,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -19,96 +30,7 @@ app.use(session({
   }
 }));
 
-app.post('/login', function (req, res) {
-  if ((req.body.username === 'vue' && req.body.password === 'vue') || (req.body.username === 'qiutc' && req.body.password === 'qiutc')) {
-    req.session.username = req.body.username;
-    res.json({status: 1, msg: ''});
-  } else {
-    res.json({status: 0, msg: '用户名或者密码错误'});
-  }
-});
-app.post('/getUserData', function (req, res) {
-  if (req.body.username === 'vue') {
-    res.json({
-      status: 1,
-      img: 'http://coffcer.github.io/vue-chat/dist/images/2.png',
-      name: req.body.username
-    });
-  } else if (req.body.username === 'qiutc') {
-    res.json({
-      status: 1,
-      img: 'http://coffcer.github.io/vue-chat/dist/images/1.jpg',
-      name: req.body.username
-    });
-  } else {
-    res.json({
-      status: 0,
-      msg: '错误'
-    });
-  }
-});
-app.post('/getUserList', function (req, res) {
-  if (req.body.username === 'vue') {
-    res.json({
-      status: 1,
-      data: [
-        {
-          img: 'http://coffcer.github.io/vue-chat/dist/images/3.jpg',
-          name: 'qiutc',
-          id: 2,
-          chat: []
-        },
-        {
-          img: 'http://coffcer.github.io/vue-chat/dist/images/3.jpg',
-          name: 'webpack2',
-          id: 3,
-          chat: []
-        },
-        {
-          img: 'http://coffcer.github.io/vue-chat/dist/images/1.jpg',
-          name: '123',
-          id: 4,
-          chat: []
-        }
-      ]
-    });
-  }
-  if (req.body.username === 'qiutc') {
-    res.json({
-      status: 1,
-      data: [
-        {
-          img: 'http://coffcer.github.io/vue-chat/dist/images/3.jpg',
-          name: 'webpack2',
-          id: 3,
-          chat: []
-        },
-        {
-          img: 'http://coffcer.github.io/vue-chat/dist/images/1.jpg',
-          name: '123',
-          id: 4,
-          chat: []
-        },
-        {
-          img: 'http://coffcer.github.io/vue-chat/dist/images/2.png',
-          name: 'vue',
-          id: 1,
-          chat: []
-        }
-      ]
-    });
-  }
-});
-
-app.get('/login', function (req, res, next) {
-  if (req.session.username) {
-    res.redirect('/');
-  }
-  next();
-});
-
-// 端口号
-var port = process.env.PORT || 8888;
+app.use('/', router);
 
 // 调用webpack并把配置传递过去
 var compiler = webpack(config);
@@ -153,4 +75,4 @@ var server = app.listen(port, function (err) {
 });
 
 // socket
-chatSocket(server);
+chatSocket(server, sessionStore);

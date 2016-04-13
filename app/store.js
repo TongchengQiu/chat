@@ -2,7 +2,7 @@ import socket from './socket';
 require('whatwg-fetch');
 
 var datas = {
-  username: '',
+  // username: '',
   userData: {},
   userList: [],
   activeUser: -1,
@@ -15,6 +15,7 @@ var methods = {
   login: function (username, password, conf) {
     window.fetch('/login', {
       method: 'POST',
+      credentials: 'same-origin',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -27,9 +28,9 @@ var methods = {
     .then(parseJSON)
     .then(function (result) {
       if (result.status === 1) {
-        datas.username = username;
+        // datas.username = username;
         lstorage.clear();
-        lstorage.setItem('username', datas.username);
+        // lstorage.setItem('username', datas.username);
         conf.seccess();
       } else if (result.status === 0) {
         conf.error(result.msg);
@@ -40,23 +41,19 @@ var methods = {
 
   // 获取当前用户数据，接受 username
   getUserData: function () {
-    var _username = lstorage.getItem('username');
     window.fetch('/getUserData', {
-      method: 'POST',
+      credentials: 'same-origin',
+      method: 'GET',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: _username
-      })
+        'Accept': 'application/json'
+      }
     })
     .then(parseJSON)
     .then((result) => {
       if (result.status === 1) {
         datas.userData = {
           img: result.img,
-          name: result.name
+          username: result.username
         };
       } else if (result.status === 0) {
         console.log(result.error);
@@ -74,16 +71,12 @@ var methods = {
       return true;
     }
 
-    var _username = lstorage.getItem('username');
     window.fetch('/getUserList', {
-      method: 'POST',
+      credentials: 'same-origin',
+      method: 'GET',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: _username
-      })
+        'Accept': 'application/json'
+      }
     })
     .then(parseJSON)
     .then((result) => {
@@ -99,10 +92,8 @@ var methods = {
 
   // 打开 socket
   openSocket: function () {
-    var _username = lstorage.getItem('username');
-    var that = this;
-    this.sendFoo = socket(_username, function (msg) {
-      that.receiveMsg(msg);
+    this.sendFoo = socket((msg) => {
+      this.receiveMsg(msg);
     });
   },
 
