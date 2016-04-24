@@ -15,7 +15,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="scss">
   .search-bar {
     position: absolute;
     top: 70px;

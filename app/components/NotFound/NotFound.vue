@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<style media="screen" lang="sass">
+<style media="screen" lang="scss">
   .no-found {
     text-align: center;
     padding-top: 140px;

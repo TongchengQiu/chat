@@ -32,7 +32,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="scss">
 .list {
   width: 100%;
   height: 100%;

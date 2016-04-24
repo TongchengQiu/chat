@@ -13,7 +13,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="scss">
   .my-card {
     position: absolute;
     top: 0px;

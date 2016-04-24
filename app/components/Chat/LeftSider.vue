@@ -32,7 +32,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="scss">
 .left-sider {
   float: left;
   width: 200px;

@@ -2,7 +2,6 @@ var webpack = require('webpack');
 var path = require('path');
 var merge = require('webpack-merge');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-
 var config = require('./webpack.base.conf');
 
 // 入口，需要处理
@@ -16,15 +15,12 @@ Object.keys(config.entry).forEach(function (name, i) {
 module.exports = merge(config, {
   // map 配置
   devtool: '#eval-source-map',
-  output: {
-    publicPath: '/'
-  },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new HtmlWebpackPlugin({
-      filename: './index.html',
+      filename: 'index.html',
       template: path.resolve(__dirname, '../app/index.html'),
       inject: true
     })

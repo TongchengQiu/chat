@@ -25,7 +25,7 @@ export default {
 
 </script>
 
-<style media="screen" lang="sass">
+<style media="screen" lang="scss">
   .chat-box {
     width: 600px;
     height: 100%;

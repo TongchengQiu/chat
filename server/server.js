@@ -9,7 +9,7 @@ var router = require('./router.js');
 var chatSocket = require('./chat-socket');
 
 var app = express();
-var port = process.env.PORT || '3000';
+var port = process.env.PORT || '8080';
 
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -32,7 +32,7 @@ app.use(session({
   }
 }));
 
-app.use('/', router);
+app.use('/api', router);
 
 app.get('*', function (req, res) {
   sendIndex(res);

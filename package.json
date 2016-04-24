@@ -41,6 +41,7 @@
     "fetch": "^1.0.1",
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.15.0",
+    "http-proxy-middleware": "^0.14.0",
     "node-sass": "^3.4.2",
     "rimraf": "^2.5.2",
     "sass-loader": "^3.2.0",

@@ -13,7 +13,7 @@ var methods = {
 
   // 接受 用户名，密码，以及 conf{ success, error}两个函数
   login: function (username, password, conf) {
-    window.fetch('/login', {
+    window.fetch('/api/login', {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
@@ -41,7 +41,7 @@ var methods = {
 
   // 获取当前用户数据，接受 username
   getUserData: function () {
-    window.fetch('/getUserData', {
+    window.fetch('/api/getUserData', {
       credentials: 'same-origin',
       method: 'GET',
       headers: {
@@ -71,7 +71,7 @@ var methods = {
       return true;
     }
 
-    window.fetch('/getUserList', {
+    window.fetch('/api/getUserList', {
       credentials: 'same-origin',
       method: 'GET',
       headers: {

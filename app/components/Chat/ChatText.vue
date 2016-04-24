@@ -32,7 +32,7 @@ export default {
 
 </script>
 
-<style media="screen" lang="sass">
+<style media="screen" lang="scss">
   .chat-text {
     position: relative;
     width: 100%;

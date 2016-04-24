@@ -46,14 +46,14 @@ export default {
 };
 </script>
 
-<style lang="sass">
-body {
-  padding-top: 30px;
-}
-.chat {
-  overflow: hidden;
-  width: 800px;
-  height: 600px;
-  margin: 0 auto;
-}
+<style lang="scss">
+  body {
+    padding-top: 30px;
+  }
+  .chat {
+    overflow: hidden;
+    width: 800px;
+    height: 600px;
+    margin: 0 auto;
+  }
 </style>

@@ -1,4 +1,5 @@
 var path = require('path');
+var config = require('../config');
 var cssLoaders = require('./css-loaders');
 
 // 定义根目录
@@ -11,16 +12,17 @@ module.exports = {
   },
   // 出口
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    publicPath: './static/',
-    filename: 'static/js/[name].[hash].js',
+    path: config.build.assetsRoot,
+    publicPath: '/',
+    filename: '[name].[hash].js',
     chunkFilename: '[id].[chunkhash].js'
   },
   resolve: {
     extensions: ['', '.js', '.vue'],
     fallback: [path.join(__dirname, '../node_modules')],
     alias: {
-      'app': path.resolve(__dirname, '../app')
+      'static': path.resolve(__dirname, '../app/static'),
+      'components': path.resolve(__dirname, '../app/components')
     }
   },
   resolveLoader: {
@@ -65,23 +67,19 @@ module.exports = {
         loader: 'vue-html'
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/,
-        loader: 'url?limit=10240&name=static/images/[name].[ext]'
-      },
-      {
-        test: /\.(woff2?|eot|ttf)(\?.*)?$/,
+        test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url',
         query: {
           limit: 10000,
-          name: '[name].[ext]?[hash:7]'
+          name: path.join(config.build.assetsSubDirectory, '[name].[hash:7].[ext]')
         }
       }
     ]
+  },
+  vue: {
+    loaders: cssLoaders()
+  },
+  eslint: {
+    formatter: require('eslint-friendly-formatter')
   }
-  // vue: {
-  //   loaders: cssLoaders()
-  // }
-  // eslint: {
-  //   formatter: require('eslint-friendly-formatter')
-  // }
 };

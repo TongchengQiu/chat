@@ -101,7 +101,7 @@ export default {
 }
 </script>
 
-<style media="screen" lang="sass">
+<style media="screen" lang="scss">
   body {
     padding-top: 50px;
   }

@@ -1,28 +1,32 @@
 var webpack = require('webpack');
 var path = require('path');
 var merge = require('webpack-merge');
-var HtmlWebpackPlugin = require('html-webpack-plugin')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
-
-var config = require('./webpack.base.conf');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var baseConfig = require('./webpack.base.conf');
 var cssLoaders = require('./css-loaders');
+var config = require('../config');
 
-var SOURCE_MAP = false;
-
-module.exports = merge(config, {
-  devtool: SOURCE_MAP ? '#source-map' : false,
+module.exports = merge(baseConfig, {
+  devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    publicPath: '/',
-    filename: 'static/js/[name].[hash].js',
-    chunkFilename: 'static/js/[id].[chunkhash].js'
+    path: config.build.assetsRoot,
+    publicPath: config.build.assetsPublicPath,
+    filename: path.join(config.build.assetsSubDirectory, '[name].[chunkhash].js'),
+    chunkFilename: path.join(config.build.assetsSubDirectory, '[id].[chunkhash].js')
   },
-  // vue: {
-  //   loaders: cssLoaders({
-  //     sourceMap: SOURCE_MAP,
-  //     extract: true
-  //   })
-  // },
+  vue: {
+    loaders: cssLoaders({
+      sourceMap: config.build.productionSourceMap,
+      extract: true
+    })
+  },
+  loaders: [
+    {
+      test: /\.scss/,
+      loader: ExtractTextPlugin.extract('style-loader', ['css', 'autoprefixer', 'sass'])
+    }
+  ],
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
@@ -35,9 +39,11 @@ module.exports = merge(config, {
       }
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
-    new ExtractTextPlugin('static/css/[name].[contenthash].css'),
+    new ExtractTextPlugin(path.join(config.build.assetsSubDirectory, '[name].[contenthash].css')),
     new HtmlWebpackPlugin({
-      filename: './index.html',
+      filename: process.env.NODE_ENV === 'testing'
+        ? 'index.html'
+        : config.build.index,
       template: path.resolve(__dirname, '../app/index.html'),
       inject: true,
       minify: {

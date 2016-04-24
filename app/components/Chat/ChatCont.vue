@@ -20,7 +20,7 @@ export default {
 
 </script>
 
-<style media="screen" lang="sass">
+<style media="screen" lang="scss">
 .chat-cont {
   width: 100%;
   height: 440px;
