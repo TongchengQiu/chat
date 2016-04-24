@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 var router = require('./router.js');
+var chatSocket = require('./chat-socket');
 
 var app = express();
 var port = process.env.PORT || '3000';
@@ -44,13 +45,16 @@ app.use(function (req, res, next) {
   res.end('404');
 });
 
-app.listen(port, 'localhost', function (error) {
+var server = app.listen(port, 'localhost', function (error) {
   if (error) {
     console.error(error);
   } else {
     console.info('==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
   }
 });
+
+// socket
+chatSocket(server, sessionStore);
 
 function sendIndex (res) {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
