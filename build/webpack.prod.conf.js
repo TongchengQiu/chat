@@ -21,12 +21,14 @@ module.exports = merge(baseConfig, {
       extract: true
     })
   },
-  loaders: [
-    {
-      test: /\.scss/,
-      loader: ExtractTextPlugin.extract('style-loader', ['css', 'autoprefixer', 'sass'])
-    }
-  ],
+  module: {
+    loaders: [
+      {
+        test: /\.scss/,
+        loader: ExtractTextPlugin.extract('style-loader', ['css', 'autoprefixer', 'sass'])
+      }
+    ]
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {

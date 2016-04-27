@@ -15,6 +15,14 @@ Object.keys(config.entry).forEach(function (name, i) {
 module.exports = merge(config, {
   // map 配置
   devtool: '#eval-source-map',
+  module: {
+    loaders: [
+      {
+        test: /\.scss/,
+        loaders: ['style', 'css', 'autoprefixer', 'sass']
+      }
+    ]
+  },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
